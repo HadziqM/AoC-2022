@@ -36,4 +36,4 @@ def main():
     print("stage 2 = ", "".join([i[-1] for i in crt2]))
 
 
-print(main())
+main()
