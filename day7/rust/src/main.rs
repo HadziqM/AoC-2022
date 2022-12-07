@@ -19,7 +19,7 @@ fn stage1() {
                     library.insert(unique_str.to_owned(), 0 as usize);
                 }
             }
-        } else if new_vec[0].chars().nth(0).unwrap().is_ascii_digit() {
+        } else if new_vec[0].parse::<usize>().is_ok() {
             let value = new_vec[0].parse::<usize>().unwrap();
             for i in &path {
                 let hmap = library.get(i).unwrap();
@@ -27,21 +27,20 @@ fn stage1() {
             }
         }
     }
-    let mut total = 0 as usize;
-    for (_, value) in &library {
-        if value <= &100000 {
-            total += value.to_owned()
-        }
-    }
-    let needed_space = 30000000 - (70000000 - library.get("/0").unwrap());
-    let mut candidate: Vec<usize> = Vec::new();
-    for (_, value) in &library {
-        if value >= &needed_space {
-            candidate.push(value.to_owned())
-        }
-    }
+
+    let total = library
+        .values()
+        .cloned()
+        .filter(|&i| i <= 100000)
+        .sum::<usize>();
+    let freed_space = library
+        .values()
+        .cloned()
+        .filter(|&i| i >= 30000000 - (70000000 - library.get("/0").unwrap()))
+        .min()
+        .unwrap();
     println!("stage 1 = {}", total);
-    println!("stage 2 = {}", &candidate.iter().min().unwrap());
+    println!("stage 2 = {}", freed_space);
 }
 fn main() {
     stage1()
