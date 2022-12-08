@@ -15,6 +15,7 @@ fn get_grid() -> Vec<Vec<u32>> {
 fn stage1() {
     let mut total = 0 as usize;
     let input = get_grid();
+    let mut size: Vec<u32> = Vec::new();
     for (i, j) in input.iter().enumerate() {
         if i == 0 || i == input.len() - 1 {
             total += j.len();
@@ -40,6 +41,12 @@ fn stage1() {
                 for o in k + 1..j.len() {
                     right.push(input[i][o])
                 }
+                let new_up = up.iter().rev().map(|e| e.to_owned()).collect::<Vec<u32>>();
+                let new_left = left
+                    .iter()
+                    .rev()
+                    .map(|e| e.to_owned())
+                    .collect::<Vec<u32>>();
                 if up.iter().max().unwrap() < l
                     || bot.iter().max().unwrap() < l
                     || left.iter().max().unwrap() < l
@@ -47,9 +54,23 @@ fn stage1() {
                 {
                     total += 1
                 }
+                size.push(
+                    get_size(&new_up, l)
+                        * get_size(&bot, l)
+                        * get_size(&new_left, l)
+                        * get_size(&right, l),
+                );
             }
         }
     }
-    println!("stage 1 = {}", total)
+    println!("stage 1 = {}", total);
+    println!("stage 2 = {}", size.iter().max().unwrap())
 }
-fn stage2() {}
+fn get_size(input: &Vec<u32>, val: &u32) -> u32 {
+    for (i, j) in input.iter().enumerate() {
+        if j >= val {
+            return i as u32 + 1;
+        }
+    }
+    return input.len() as u32;
+}
