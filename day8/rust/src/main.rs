@@ -29,24 +29,18 @@ fn stage1() {
                 let mut bot: Vec<u32> = Vec::new();
                 let mut left: Vec<u32> = Vec::new();
                 let mut right: Vec<u32> = Vec::new();
-                for o in 0..i {
+                for o in (0..i).rev() {
                     up.push(input[o][k])
                 }
                 for o in i + 1..input.len() {
                     bot.push(input[o][k])
                 }
-                for o in 0..k {
+                for o in (0..k).rev() {
                     left.push(input[i][o])
                 }
                 for o in k + 1..j.len() {
                     right.push(input[i][o])
                 }
-                let new_up = up.iter().rev().map(|e| e.to_owned()).collect::<Vec<u32>>();
-                let new_left = left
-                    .iter()
-                    .rev()
-                    .map(|e| e.to_owned())
-                    .collect::<Vec<u32>>();
                 if up.iter().max().unwrap() < l
                     || bot.iter().max().unwrap() < l
                     || left.iter().max().unwrap() < l
@@ -55,10 +49,7 @@ fn stage1() {
                     total += 1
                 }
                 size.push(
-                    get_size(&new_up, l)
-                        * get_size(&bot, l)
-                        * get_size(&new_left, l)
-                        * get_size(&right, l),
+                    get_size(&up, l) * get_size(&bot, l) * get_size(&left, l) * get_size(&right, l),
                 );
             }
         }
